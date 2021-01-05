@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import Section from './components/Section/Section';
+import FeedbackOptions from './components/FeedbackOption';
+import Section from './components/Section';
+import Statistics from './components/Statistics';
+import Notification from './components/Notification';
+import Card from './components/Card';
 // import PropTypes from 'prop-types';
 
 class App extends Component {
@@ -12,13 +16,37 @@ class App extends Component {
     return this.state.bad + this.state.good + this.state.neutral;
   }
   countPositiveFeedbackPercentage() {
-    return Math.floor((this.countTotalFeedback() / this.state.good) * 100);
+    return this.countTotalFeedback() === 0
+      ? 0
+      : Math.floor((this.state.good / this.countTotalFeedback()) * 100);
   }
+  handleFeedback = e => {
+    if (['good', 'neutral', 'bad'].includes(e.target.dataset.btnType))
+      this.setState({
+        [e.target.dataset.btnType]:
+          this.state[`${e.target.dataset.btnType}`] + 1,
+      });
+  };
   render() {
     return (
-      <div>
-        <Section title="Test section component"></Section>
-      </div>
+      <Card>
+        <Section title="Please leave feedback">
+          <FeedbackOptions onLeaveFeedback={this.handleFeedback} />
+        </Section>
+        {this.countTotalFeedback() === 0 ? (
+          <Notification message="No feedback given" />
+        ) : (
+          <Section title="Statistics">
+            <Statistics
+              good={this.state.good}
+              neutral={this.state.neutral}
+              bad={this.state.bad}
+              total={this.countTotalFeedback()}
+              positivePercentage={this.countPositiveFeedbackPercentage()}
+            />
+          </Section>
+        )}
+      </Card>
     );
   }
 }
