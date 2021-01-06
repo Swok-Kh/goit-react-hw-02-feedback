@@ -33,10 +33,10 @@ class App extends Component {
         <Section title="Please leave feedback">
           <FeedbackOptions onLeaveFeedback={this.handleFeedback} />
         </Section>
-        {this.countTotalFeedback() === 0 ? (
-          <Notification message="No feedback given" />
-        ) : (
-          <Section title="Statistics">
+        <Section title="Statistics">
+          {this.countTotalFeedback() === 0 ? (
+            <Notification message="No feedback given" />
+          ) : (
             <Statistics
               good={this.state.good}
               neutral={this.state.neutral}
@@ -44,8 +44,8 @@ class App extends Component {
               total={this.countTotalFeedback()}
               positivePercentage={this.countPositiveFeedbackPercentage()}
             />
-          </Section>
-        )}
+          )}
+        </Section>
       </Card>
     );
   }
