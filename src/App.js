@@ -4,7 +4,6 @@ import Section from './components/Section';
 import Statistics from './components/Statistics';
 import Notification from './components/Notification';
 import Card from './components/Card';
-// import PropTypes from 'prop-types';
 
 class App extends Component {
   state = {
@@ -37,20 +36,19 @@ class App extends Component {
           {this.countTotalFeedback() === 0 ? (
             <Notification message="No feedback given" />
           ) : (
-            <Statistics
-              good={this.state.good}
-              neutral={this.state.neutral}
-              bad={this.state.bad}
-              total={this.countTotalFeedback()}
-              positivePercentage={this.countPositiveFeedbackPercentage()}
-            />
-          )}
+              <Statistics
+                good={this.state.good}
+                neutral={this.state.neutral}
+                bad={this.state.bad}
+                total={this.countTotalFeedback()}
+                positivePercentage={this.countPositiveFeedbackPercentage()}
+              />
+            )}
         </Section>
       </Card>
     );
   }
 }
 
-App.propTypes = {};
 
 export default App;
