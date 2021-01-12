@@ -12,38 +12,50 @@ class App extends Component {
     bad: 0,
   };
   countTotalFeedback() {
-    return this.state.bad + this.state.good + this.state.neutral;
+    const { good, neutral, bad } = this.state;
+
+    return bad + good + neutral;
   }
   countPositiveFeedbackPercentage() {
-    return this.countTotalFeedback() === 0
-      ? 0
-      : Math.floor((this.state.good / this.countTotalFeedback()) * 100);
+    const { good } = this.state;
+    const total = this.countTotalFeedback();
+
+    return total === 0 ? 0 : Math.floor((good / total) * 100);
   }
   handleFeedback = e => {
-    if (['good', 'neutral', 'bad'].includes(e.target.dataset.btnType))
-      this.setState({
-        [e.target.dataset.btnType]:
-          this.state[`${e.target.dataset.btnType}`] + 1,
-      });
+    const changed = JSON.parse(e.target.value);
+    for (const key in changed) {
+      if (Object.hasOwnProperty.call(changed, key)) {
+        changed[key] += 1;
+      }
+    }
+    this.setState(prevState => {
+      const nextState = { ...prevState, ...changed };
+
+      return nextState;
+    });
   };
   render() {
     return (
       <Card>
         <Section title="Please leave feedback">
-          <FeedbackOptions onLeaveFeedback={this.handleFeedback} />
+          <FeedbackOptions
+            options={this.state}
+            onLeaveFeedback={this.handleFeedback}
+          />
         </Section>
         <Section title="Statistics">
           {this.countTotalFeedback() === 0 ? (
             <Notification message="No feedback given" />
           ) : (
-              <Statistics
-                good={this.state.good}
-                neutral={this.state.neutral}
-                bad={this.state.bad}
-                total={this.countTotalFeedback()}
-                positivePercentage={this.countPositiveFeedbackPercentage()}
-              />
-            )}
+            <Statistics
+              good={this.state.good}
+              neutral={this.state.neutral}
+              bad={this.state.bad}
+              total={this.countTotalFeedback()}
+              positivePercentage={this.countPositiveFeedbackPercentage()}
+            />
+          )}
         </Section>
       </Card>
     );
