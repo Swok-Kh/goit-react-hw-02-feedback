@@ -4,33 +4,21 @@ import styles from './fedbackOption.module.scss';
 
 class FeedbackOptions extends Component {
   render() {
-    const {
-      onLeaveFeedback,
-      options: { good, neutral, bad },
-    } = this.props;
+    const { onLeaveFeedback, options } = this.props;
+    const keys = Object.keys(options);
     return (
       <div className={styles.wrapper}>
-        <button
-          className={styles.good}
-          value={`{"good": ${good}}`}
-          onClick={onLeaveFeedback}
-        >
-          Good
-        </button>
-        <button
-          className={styles.neutral}
-          value={`{"neutral": ${neutral}}`}
-          onClick={onLeaveFeedback}
-        >
-          Neutral
-        </button>
-        <button
-          className={styles.bad}
-          value={`{"bad": ${bad}}`}
-          onClick={onLeaveFeedback}
-        >
-          Bad
-        </button>
+        {keys.map(key => (
+          <button
+            key={key}
+            className={styles[key]}
+            onClick={() => {
+              onLeaveFeedback(key);
+            }}
+          >
+            {key.slice(0, 1).toLocaleUpperCase() + key.slice(1)}
+          </button>
+        ))}
       </div>
     );
   }

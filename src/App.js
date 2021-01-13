@@ -22,20 +22,13 @@ class App extends Component {
 
     return total === 0 ? 0 : Math.floor((good / total) * 100);
   }
-  handleFeedback = e => {
-    const changed = JSON.parse(e.target.value);
-    for (const key in changed) {
-      if (Object.hasOwnProperty.call(changed, key)) {
-        changed[key] += 1;
-      }
-    }
+  handleFeedback = feedback => {
     this.setState(prevState => {
-      const nextState = { ...prevState, ...changed };
-
-      return nextState;
+      return { [feedback]: prevState[feedback] + 1 };
     });
   };
   render() {
+    const { good, neutral, bad } = this.state;
     return (
       <Card>
         <Section title="Please leave feedback">
@@ -49,9 +42,9 @@ class App extends Component {
             <Notification message="No feedback given" />
           ) : (
             <Statistics
-              good={this.state.good}
-              neutral={this.state.neutral}
-              bad={this.state.bad}
+              good={good}
+              neutral={neutral}
+              bad={bad}
               total={this.countTotalFeedback()}
               positivePercentage={this.countPositiveFeedbackPercentage()}
             />
